@@ -1,556 +1,807 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>115年第1季成績優良名單及病歷審查結果</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
-<style>
-  :root{
-    --c-bg:#eef6fb;
-    --c-bg-2:#e0f2fe;
-    --c-primary:#0e7490;
-    --c-primary-dark:#0c4a6e;
-    --c-secondary:#0d9488;
-    --c-accent:#6366f1;
-    --c-red:#dc2626;
-    --c-amber:#d97706;
-    --c-emerald:#059669;
-    --c-text:#0f172a;
-    --c-muted:#475569;
-    --c-card:#ffffff;
-    --c-border:#bae6fd;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;color:var(--c-text);background:linear-gradient(180deg,#f0f9ff 0%,#ecfeff 100%);scroll-behavior:smooth}
-  body{line-height:1.55}
-  .deck{display:flex;flex-direction:column;gap:32px;padding:32px 24px 64px}
-  .slide{background:#ffffff;border-radius:24px;box-shadow:0 12px 36px rgba(15,23,42,.08),0 2px 8px rgba(15,23,42,.04);padding:48px 56px;max-width:1280px;margin:0 auto;width:100%;position:relative;overflow:hidden;border:1px solid #e0f2fe}
-  .slide::before{content:"";position:absolute;left:0;top:0;width:8px;height:100%;background:linear-gradient(180deg,var(--c-primary),var(--c-secondary))}
-  h1.slide-title{font-size:34px;font-weight:900;color:var(--c-primary-dark);margin:0 auto 22px;padding-bottom:14px;border-bottom:3px solid var(--c-primary);display:table;text-align:center}
-  .slide{ text-align: initial }
-  .slide > h1.slide-title{ display:block; text-align:center; border-bottom:none; position:relative; padding-bottom:18px }
-  .slide > h1.slide-title::after{ content:""; display:block; width:120px; height:3px; background:var(--c-primary); margin:14px auto 0; border-radius:2px }
-  h2.sub-title{font-size:24px;font-weight:700;color:var(--c-primary);margin:24px 0 12px}
-  h3.minor-title{font-size:20px;font-weight:700;color:var(--c-secondary);margin:18px 0 10px}
-  table.data{width:100%;border-collapse:separate;border-spacing:0;font-size:18px;margin:12px 0 8px;background:#ffffff;border-radius:14px;overflow:hidden;box-shadow:0 4px 14px rgba(15,23,42,.05)}
-  table.data thead th{background:linear-gradient(180deg,#0e7490,#0c4a6e);color:#fff;padding:14px 12px;font-weight:700;font-size:19px;text-align:center;border-right:1px solid rgba(255,255,255,.18)}
-  table.data thead th:last-child{border-right:none}
-  table.data td{padding:12px 14px;border-bottom:1px solid #e2e8f0;text-align:center;font-size:18px}
-  table.data tr:nth-child(even) td{background:#f0f9ff}
-  table.data tr:hover td{background:#e0f2fe}
-  table.data td.group{font-weight:800;color:var(--c-primary-dark);background:#cffafe !important;font-size:19px}
-  .remark{margin-top:18px;background:#fef3c7;border-left:6px solid #d97706;padding:14px 22px;border-radius:10px;color:#78350f;font-weight:700;font-size:18px}
-  .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:18px 0}
-  .info-card{background:linear-gradient(135deg,#f0f9ff,#e0f7fa);border:1px solid #67e8f9;border-radius:18px;padding:22px;text-align:center;box-shadow:0 6px 18px rgba(14,116,144,.08)}
-  .info-card .label{font-size:18px;color:var(--c-muted);font-weight:600}
-  .info-card .value{font-size:32px;color:var(--c-primary-dark);font-weight:900;margin-top:6px}
-  .audit-list{font-size:20px;line-height:2;color:var(--c-text);padding-left:20px}
-  .audit-list li{margin:6px 0}
-  .chart-row{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:10px}
-  .chart-card{background:#ffffff;border:1px solid #bae6fd;border-radius:18px;padding:18px 18px 8px;box-shadow:0 6px 18px rgba(14,116,144,.06)}
-  .chart-card h4{margin:0 0 8px;text-align:center;color:var(--c-primary-dark);font-size:22px;font-weight:800}
-  .chart-canvas-wrap{position:relative;height:360px}
-  .chart-caption{margin-top:14px;font-size:22px;font-weight:800;color:var(--c-primary-dark);text-align:center;background:#ecfeff;padding:12px;border-radius:10px;border:1px dashed #67e8f9}
-  .single-chart-wrap{position:relative;height:520px;margin-top:8px}
-  .ugy-card{display:flex;align-items:center;justify-content:center;flex-direction:column;background:linear-gradient(135deg,#0e7490,#0d9488);color:#fff;border-radius:24px;padding:48px 32px;margin:24px auto;max-width:760px;box-shadow:0 20px 50px rgba(14,116,144,.25)}
-  .ugy-card .dept-name{font-size:42px;font-weight:900;letter-spacing:2px;margin-bottom:16px;text-align:center;writing-mode:horizontal-tb}
-  .ugy-stats{display:flex;gap:48px;margin-top:14px}
-  .ugy-stat{text-align:center}
-  .ugy-stat .l{font-size:20px;opacity:.85;font-weight:600}
-  .ugy-stat .v{font-size:54px;font-weight:900;line-height:1.1;margin-top:6px}
-  .common-issues{display:flex;flex-direction:column;gap:16px;margin-top:18px}
-  .issue-block{border-radius:16px;padding:18px 22px;box-shadow:0 4px 12px rgba(15,23,42,.06)}
-  .issue-block .head{font-size:22px;font-weight:900;margin-bottom:8px;display:flex;align-items:center;gap:10px}
-  .issue-block .body{font-size:18px;line-height:1.75;color:#1e293b}
-  .issue-defect{background:linear-gradient(135deg,#fee2e2,#fecaca);border-left:8px solid #dc2626}
-  .issue-defect .head{color:#7f1d1d}
-  .issue-plan{background:linear-gradient(135deg,#fef3c7,#fde68a);border-left:8px solid #d97706}
-  .issue-plan .head{color:#78350f}
-  .issue-track{background:linear-gradient(135deg,#d1fae5,#a7f3d0);border-left:8px solid #059669}
-  .issue-track .head{color:#064e3b}
-  .total-line{display:flex;gap:24px;flex-wrap:wrap;margin-top:18px}
-  .total-pill{background:#0e7490;color:#fff;padding:12px 22px;font-size:20px;font-weight:800;border-radius:999px;box-shadow:0 6px 14px rgba(14,116,144,.25)}
-  .monitor-title{font-size:22px;font-weight:800;color:var(--c-primary-dark);margin:8px 0 14px;background:#f0f9ff;padding:14px 18px;border-radius:12px;border-left:6px solid var(--c-primary)}
-  .scroll-hint{position:fixed;right:22px;bottom:22px;background:rgba(14,116,144,.92);color:#fff;padding:10px 16px;font-size:14px;border-radius:999px;box-shadow:0 8px 22px rgba(14,116,144,.3);z-index:99;pointer-events:none}
-  .page-header{max-width:1280px;margin:0 auto;padding:8px 24px 0;text-align:center;color:var(--c-primary-dark)}
-  .page-header h1{margin:0;font-size:42px;font-weight:900;letter-spacing:2px}
-  .page-header .sub{font-size:18px;color:var(--c-muted);margin-top:6px;font-weight:600}
-  .legend-note{font-size:15px;color:var(--c-muted);text-align:center;margin-top:6px}
-  @media (max-width: 960px){
-    .slide{padding:28px 18px}
-    .chart-row{grid-template-columns:1fr}
-    .info-grid{grid-template-columns:1fr}
-    h1.slide-title{font-size:26px}
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>115年第1季成績優良名單及病歷審查結果</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- ECharts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        medical: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .slide-section {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+        }
+        .dark .slide-section {
+            border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.125rem;
+        }
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 0.75rem;
+            text-align: center;
+        }
+        .dark th, .dark td {
+            border-color: #475569;
+        }
+        th {
+            background-color: #f1f5f9;
+            font-weight: 700;
+        }
+        .dark th {
+            background-color: #1e293b;
+            color: #f8fafc;
+        }
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .dark tr:nth-child(even) {
+            background-color: #0f172a;
+        }
+        .chart-container {
+            width: 100%;
+            height: 450px;
+            margin-bottom: 1rem;
+        }
+        .highlight-text {
+            color: #dc2626;
+            font-weight: bold;
+        }
+        .dark .highlight-text {
+            color: #ef4444;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 font-sans antialiased transition-colors duration-300">
 
-<div class="page-header">
-  <h1>115年第1季成績優良名單及病歷審查結果</h1>
-  <div class="sub">病歷審查組 · 115年度第一季 (115/01–03月)</div>
-</div>
-
-<main class="deck">
-
-  <!-- ========== Slide 1 ========== -->
-  <section class="slide" id="slide-1">
-        <h1 class="slide-title">115年第一季 (1~3月) 病歷書寫成績優良名單</h1>
-
-    <table class="data">
-      <thead>
-        <tr><th style="width:14%">組別</th><th style="width:10%">名次</th><th style="width:32%">科&nbsp;&nbsp;別</th><th style="width:22%">姓名</th><th style="width:22%">職級</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="group" rowspan="4">內科系<br>住院醫師組</td><td>1</td><td>家庭醫學部 (run老年醫學科)</td><td>吳哲嘉</td><td>LR2</td></tr>
-        <tr><td>2</td><td>家庭醫學部 (run內分泌新陳代謝科)</td><td>唐翊智</td><td>LR1</td></tr>
-        <tr><td>3</td><td>內科部 (run加護醫學部)</td><td>柯虹羽</td><td>LR1</td></tr>
-        <tr><td>4</td><td>家庭醫學部 (run緩和醫學科)</td><td>陳柏智</td><td>LR2</td></tr>
-
-        <tr><td class="group" rowspan="5">外科系<br>住院醫師組</td><td>1</td><td>外科部</td><td>高偉鈞</td><td>LR2</td></tr>
-        <tr><td>2</td><td>骨科部</td><td>許振宗</td><td>LR1</td></tr>
-        <tr><td>3</td><td>外科部</td><td>林仁傑</td><td>LR1</td></tr>
-        <tr><td>4</td><td>牙醫部</td><td>林裕鈞</td><td>LR2</td></tr>
-        <tr><td>5</td><td>婦產部</td><td>陳品州</td><td>LR2</td></tr>
-
-        <tr><td class="group" rowspan="2">急診醫學部<br>住院醫師組</td><td>1</td><td>急診醫學部</td><td>李東翰</td><td>LR2</td></tr>
-        <tr><td>2</td><td>急診醫學部</td><td>陳政瑄</td><td>CR(LR3)</td></tr>
-
-        <tr><td class="group">精神醫學部<br>住院醫師組</td><td>1</td><td>精神醫學部</td><td>黃朝偉</td><td>LR2</td></tr>
-
-        <tr><td class="group" rowspan="5">PGY醫師組</td><td>1</td><td>一般科</td><td>黃雅麟</td><td>PGY2</td></tr>
-        <tr><td>2</td><td>一般科</td><td>孫懷奇</td><td>PGY2</td></tr>
-        <tr><td>3</td><td>一般科</td><td>李季玲</td><td>PGY1</td></tr>
-        <tr><td>4</td><td>一般科</td><td>王鼎言</td><td>PGY2</td></tr>
-        <tr><td>5</td><td>一般科</td><td>黃崢璵</td><td>PGY2</td></tr>
-      </tbody>
-    </table>
-
-    <div class="remark">備註：以上名單皆各頒發獎金 2,000 元及獎狀乙紙。</div>
-  </section>
-
-  <!-- ========== Slide 2 ========== -->
-  <section class="slide" id="slide-2">
-        <h1 class="slide-title">115年度第一季 (115/01-03月) 受訓醫師／醫學生病歷審查結果</h1>
-    <h2 class="sub-title">病歷審查組</h2>
-
-    <div class="info-grid">
-      <div class="info-card"><div class="label">第一季 (115/01-03月) 抽審本數</div><div class="value">123 本</div></div>
-      <div class="info-card"><div class="label">總平均</div><div class="value">87.28</div></div>
-      <div class="info-card"><div class="label">全人照護本數</div><div class="value">11 本</div></div>
-    </div>
-
-    <h3 class="minor-title">一、各科部病歷成績</h3>
-    <ol class="audit-list">
-      <li>內科系 (部)</li>
-      <li>外科系 (部)</li>
-      <li>自審科部 (兒科部 / 精神醫學部 / 婦產部 / 加護醫學部 / 急診醫學部)</li>
-      <li>115年度第一季 主治醫師病歷指導評比</li>
-    </ol>
-  </section>
-
-  <!-- ========== Slide 3 ========== -->
-  <section class="slide" id="slide-3">
-        <h1 class="slide-title">115-Q1 總成績：內／外科系</h1>
-
-    <div class="chart-row">
-      <div class="chart-card">
-        <h4>內科系總成績 (前三名)</h4>
-        <div class="chart-canvas-wrap"><canvas id="chartInternal"></canvas></div>
-        <div class="legend-note">紅線：內科系平均 87.69</div>
-      </div>
-      <div class="chart-card">
-        <h4>外科系總成績 (前三名)</h4>
-        <div class="chart-canvas-wrap"><canvas id="chartSurgical"></canvas></div>
-        <div class="legend-note">紅線：外科系平均 86.43</div>
-      </div>
-    </div>
-
-    <div class="chart-caption">(內科系) 總成績優良前三名：緩和醫學科、內分泌新陳代謝科、皮膚科</div>
-    <div class="chart-caption" style="margin-top:10px">(外科系) 總成績優良前三名：口腔顎面外科、眼科、骨科</div>
-  </section>
-
-  <!-- ========== Slide 4 ========== -->
-  <section class="slide" id="slide-4">
-        <h1 class="slide-title">115-Q1 自審科部病歷書寫評比</h1>
-    <div class="chart-card" style="margin-top:8px">
-      <div class="single-chart-wrap"><canvas id="chartSelfAudit"></canvas></div>
-    </div>
-  </section>
-
-  <!-- ========== Slide 5 ========== -->
-  <section class="slide" id="slide-5">
-        <h1 class="slide-title">內／外科系 病歷指導優良評比排名</h1>
-
-    <div class="chart-row">
-      <div class="chart-card">
-        <h4>內科系 病歷指導優良 (前三名)</h4>
-        <div class="chart-canvas-wrap"><canvas id="chartInternalGuide"></canvas></div>
-      </div>
-      <div class="chart-card">
-        <h4>外科系 病歷指導優良 (前三名)</h4>
-        <div class="chart-canvas-wrap"><canvas id="chartSurgicalGuide"></canvas></div>
-      </div>
-    </div>
-
-    <div class="chart-caption">(內科系) 病歷指導優良前三名科別：加護醫學部、一般內科、內分泌新陳代謝科</div>
-    <div class="chart-caption" style="margin-top:10px">(外科系) 病歷指導優良前三名科別：胸腔外科、口腔顎面外科、整形外科</div>
-  </section>
-
-  <!-- ========== Slide 6 ========== -->
-  <section class="slide" id="slide-6">
-        <h1 class="slide-title">115年第一季 (115/01~03月) 主治醫師病歷指導優良名單</h1>
-
-    <table class="data">
-      <thead>
-        <tr><th style="width:18%">組別</th><th style="width:12%">名次</th><th style="width:38%">科&nbsp;&nbsp;別</th><th style="width:32%">姓名</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="group" rowspan="3">內科系</td><td>1</td><td>兒科</td><td>郭思辰</td></tr>
-        <tr><td>2</td><td>感染科</td><td>陳宏睿</td></tr>
-        <tr><td>3</td><td>加護醫學部</td><td>沈修年</td></tr>
-        <tr><td class="group" rowspan="3">外科系</td><td>1</td><td>泌尿外科</td><td>李高漢</td></tr>
-        <tr><td>2</td><td>胸腔外科</td><td>蘇英傑</td></tr>
-        <tr><td>3</td><td>整形外科</td><td>陳俊嘉</td></tr>
-      </tbody>
-    </table>
-
-    <div class="total-line">
-      <div class="total-pill">指導分數達 88 分以上 — 內科系：41 本 (總本數 60)</div>
-      <div class="total-pill" style="background:#0d9488">指導分數達 88 分以上 — 外科系：23 本 (總本數 53)</div>
-    </div>
-  </section>
-
-  <!-- ========== Slide 7 ========== -->
-  <section class="slide" id="slide-7">
-        <h1 class="slide-title">115-Q1 實習醫學生 (UGY) 成績</h1>
-
-    <div class="ugy-card">
-      <div class="dept-name">內分泌新陳代謝科</div>
-      <div class="ugy-stats">
-        <div class="ugy-stat"><div class="l">本數</div><div class="v">2</div></div>
-        <div class="ugy-stat"><div class="l">平均分數</div><div class="v">88.96</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== Slide 8 ========== -->
-  <section class="slide" id="slide-8">
-        <h1 class="slide-title">115年第一季 評分不佳項目</h1>
-
-    <div class="chart-card" style="margin-top:6px">
-      <div class="single-chart-wrap" style="height:440px"><canvas id="chartBadItems"></canvas></div>
-    </div>
-
-    <div class="common-issues">
-      <div class="issue-block issue-defect">
-        <div class="head">◆ 病歷審查常見缺失</div>
-        <div class="body">
-          <b>第 35 項：</b>主治醫師未修改學員之病歷書寫，對其所屬醫學團隊醫師的 Admission Note，未給予指正或評論。<br>
-          (Q4 上季 17 / 126 本，Q1 本季 <b style="color:#dc2626">20 / 123 本</b>)
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="text-xl font-black tracking-tight text-medical-800 dark:text-medical-100">
+                        <i class="fa-solid fa-notes-medical mr-2"></i>病歷審查報告
+                    </span>
+                </div>
+                <button id="theme-toggle" class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-medical-500 transition-all">
+                    <i class="fas fa-moon hidden dark:block"></i>
+                    <i class="fas fa-sun block dark:hidden"></i>
+                </button>
+            </div>
         </div>
-      </div>
-      <div class="issue-block issue-plan">
-        <div class="head">● 改善方案：第 35 項</div>
-        <div class="body">
-          持續個別通知單季 1 本 (Q4 上季 13 位，Q1 本季 16 位)，及單季 2 本以上 (Q4 上季 2 位，Q1 本季 2 位)，要求積極改善；兩季 (Q4 上季 + Q1 本季) 皆超過 2 本的主治醫師為 <b>0 位</b>。
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Slide 1: 成績優良名單 -->
+        <section class="slide-section">
+            <h1 class="text-4xl md:text-5xl font-black text-center mb-12 text-slate-800 dark:text-white leading-tight">
+                115年第一季(1~3月)<br>病歷書寫成績優良名單
+            </h1>
+
+            <div class="overflow-x-auto shadow-lg rounded-xl bg-white dark:bg-slate-800">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>組別</th>
+                            <th>名次</th>
+                            <th>科別</th>
+                            <th>姓名</th>
+                            <th>職級</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 內科系 -->
+                        <tr>
+                            <td rowspan="4" class="font-bold text-medical-700 dark:text-medical-300 bg-medical-50 dark:bg-slate-800">內科系<br>住院醫師組</td>
+                            <td>1</td><td>家庭醫學部 (run 老年醫學科)</td><td>吳哲嘉</td><td>LR2</td>
+                        </tr>
+                        <tr><td>2</td><td>家庭醫學部 (run 內分泌新陳代謝科)</td><td>唐翊智</td><td>LR1</td></tr>
+                        <tr><td>3</td><td>內科部 (run 加護醫學部)</td><td>柯虹羽</td><td>LR1</td></tr>
+                        <tr><td>4</td><td>家庭醫學部 (run 緩和醫學科)</td><td>陳柏智</td><td>LR2</td></tr>
+
+                        <!-- 外科系 -->
+                        <tr>
+                            <td rowspan="5" class="font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-slate-800">外科系<br>住院醫師組</td>
+                            <td>1</td><td>外科部</td><td>高偉鈞</td><td>LR2</td>
+                        </tr>
+                        <tr><td>2</td><td>骨科部</td><td>許振宗</td><td>LR1</td></tr>
+                        <tr><td>3</td><td>外科部</td><td>林仁傑</td><td>LR1</td></tr>
+                        <tr><td>4</td><td>牙醫部</td><td>林裕鈞</td><td>LR2</td></tr>
+                        <tr><td>5</td><td>婦產部</td><td>陳品州</td><td>LR2</td></tr>
+
+                        <!-- 急診 -->
+                        <tr>
+                            <td rowspan="2" class="font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-slate-800">急診醫學部<br>住院醫師組</td>
+                            <td>1</td><td rowspan="2">急診醫學部</td><td>李東翰</td><td>LR2</td>
+                        </tr>
+                        <tr><td>2</td><td>陳政瑄</td><td>CR(LR3)</td></tr>
+
+                        <!-- 精神 -->
+                        <tr>
+                            <td class="font-bold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-slate-800">精神醫學部<br>住院醫師組</td>
+                            <td>1</td><td>精神醫學部</td><td>黃朝偉</td><td>LR2</td>
+                        </tr>
+
+                        <!-- PGY -->
+                        <tr>
+                            <td rowspan="5" class="font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-slate-800">PGY 醫師組</td>
+                            <td>1</td><td rowspan="5">一般科</td><td>黃雅麟</td><td>PGY2</td>
+                        </tr>
+                        <tr><td>2</td><td>孫懷奇</td><td>PGY2</td></tr>
+                        <tr><td>3</td><td>李季玲</td><td>PGY1</td></tr>
+                        <tr><td>4</td><td>王鼎言</td><td>PGY2</td></tr>
+                        <tr><td>5</td><td>黃崢璵</td><td>PGY2</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-8 p-4 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 rounded-r-lg">
+                <p class="text-xl font-bold text-yellow-800 dark:text-yellow-200">
+                    <i class="fas fa-award mr-2"></i>備註：以上名單皆各頒發獎金2,000元及獎狀乙紙
+                </p>
+            </div>
+        </section>
+
+        <!-- Slide 2: 審查結果概覽 -->
+        <section class="slide-section">
+            <h1 class="text-4xl md:text-5xl font-black text-center mb-6 leading-tight">
+                115年度第一季(115/01-03月)<br>受訓醫師/醫學生病歷審查結果
+            </h1>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
+                <!-- 抽審本數 -->
+                <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-xl text-center transform hover:scale-105 transition-transform duration-300 border border-slate-100 dark:border-slate-700">
+                    <div class="text-medical-600 dark:text-medical-400 mb-4">
+                        <i class="fas fa-book-medical text-6xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-500 dark:text-slate-400 mb-2">抽審本數</h3>
+                    <p class="text-6xl font-black text-slate-800 dark:text-white">123 <span class="text-2xl font-normal text-slate-500">本</span></p>
+                </div>
+
+                <!-- 總平均 -->
+                <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-xl text-center transform hover:scale-105 transition-transform duration-300 border border-slate-100 dark:border-slate-700 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 -mr-4 -mt-4 w-24 h-24 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full opacity-20 blur-xl"></div>
+                    <div class="text-orange-500 mb-4">
+                        <i class="fas fa-chart-line text-6xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-500 dark:text-slate-400 mb-2">總平均</h3>
+                    <p class="text-6xl font-black text-slate-800 dark:text-white">87.28 <span class="text-2xl font-normal text-slate-500">分</span></p>
+                </div>
+
+                <!-- 全人照護本數 -->
+                <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-xl text-center transform hover:scale-105 transition-transform duration-300 border border-slate-100 dark:border-slate-700">
+                    <div class="text-emerald-600 dark:text-emerald-400 mb-4">
+                        <i class="fas fa-user-md text-6xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-500 dark:text-slate-400 mb-2">全人照護本數</h3>
+                    <p class="text-6xl font-black text-slate-800 dark:text-white">11 <span class="text-2xl font-normal text-slate-500">本</span></p>
+                </div>
+            </div>
+
+            <div class="mt-10 max-w-4xl mx-auto bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-6 border-l-8 border-medical-500">
+                <h3 class="text-2xl font-black text-medical-700 dark:text-medical-300 mb-4 flex items-center">
+                    <i class="fas fa-list-ol mr-3"></i> 一、各科部病歷成績
+                </h3>
+                <ol class="grid grid-cols-1 md:grid-cols-2 gap-3 text-lg text-slate-700 dark:text-slate-300 list-decimal list-inside">
+                    <li>內科系 (部)</li>
+                    <li>外科系 (部)</li>
+                    <li>自審科部 (兒科部 / 精神醫學部 / 婦產部 / 加護醫學部 / 急診醫學部)</li>
+                    <li>115年度第一季 主治醫師病歷指導評比</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Slide 3: 內/外科系總成績 -->
+        <section class="slide-section">
+            <h2 class="text-4xl font-black text-center mb-10">115-Q1總成績：內/外科系</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full">
+                <!-- 內科系 Chart -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg">
+                    <p class="text-center text-lg font-semibold highlight-text mb-2">內科系平均：87.69</p>
+                    <div id="chart-internal-score" class="chart-container"></div>
+                    <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
+                        <p class="text-2xl font-bold text-slate-800 dark:text-white text-center">
+                            (內科系)總成績優良前三名：
+                        </p>
+                        <p class="text-xl text-center mt-2 text-medical-600 dark:text-medical-300 font-semibold">
+                            緩和醫學科、內分泌新陳代謝科、皮膚科
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 外科系 Chart -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg">
+                    <p class="text-center text-lg font-semibold highlight-text mb-2">外科系平均：86.43</p>
+                    <div id="chart-surgical-score" class="chart-container"></div>
+                    <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
+                        <p class="text-2xl font-bold text-slate-800 dark:text-white text-center">
+                            (外科系)總成績優良前三名：
+                        </p>
+                        <p class="text-xl text-center mt-2 text-emerald-600 dark:text-emerald-300 font-semibold">
+                            口腔顎面外科、眼科、骨科
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: 自審科部評比 -->
+        <section class="slide-section">
+            <h2 class="text-4xl font-black text-center mb-10">115-Q1自審科部病歷書寫評比</h2>
+            <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg w-full max-w-4xl mx-auto">
+                <div id="chart-self-review" class="chart-container h-[500px]"></div>
+            </div>
+        </section>
+
+        <!-- Slide 5: 病歷指導優良評比排名 -->
+        <section class="slide-section">
+            <h2 class="text-4xl font-black text-center mb-10">內/外科系病歷指導優良評比排名</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full">
+                <!-- 內科系指導 Chart -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg">
+                    <div id="chart-internal-guide" class="chart-container"></div>
+                    <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
+                        <p class="text-2xl font-bold text-slate-800 dark:text-white text-center">
+                            (內科系)病歷指導優良前三名科別：
+                        </p>
+                        <p class="text-xl text-center mt-2 text-medical-600 dark:text-medical-300 font-semibold">
+                            加護醫學部、一般內科、內分泌新陳代謝科
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 外科系指導 Chart -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg">
+                    <div id="chart-surgical-guide" class="chart-container"></div>
+                    <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
+                        <p class="text-2xl font-bold text-slate-800 dark:text-white text-center">
+                            (外科系)病歷指導優良前三名科別：
+                        </p>
+                        <p class="text-xl text-center mt-2 text-emerald-600 dark:text-emerald-300 font-semibold">
+                            胸腔外科、口腔顎面外科、整形外科
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: 主治醫師指導優良名單 -->
+        <section class="slide-section">
+            <h2 class="text-3xl md:text-4xl font-black text-center mb-8">
+                115年第一季(115/01~03月)<br>主治醫師病歷指導優良名單
+            </h2>
+
+            <div class="overflow-hidden shadow-xl rounded-xl bg-white dark:bg-slate-800 mb-8 max-w-4xl mx-auto w-full">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>組別</th>
+                            <th>名次</th>
+                            <th>科別</th>
+                            <th>姓名</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 內科系 -->
+                        <tr>
+                            <td rowspan="3" class="font-bold text-medical-700 dark:text-medical-300 bg-medical-50 dark:bg-slate-800">內科系</td>
+                            <td>1</td><td>兒科</td><td class="text-xl font-bold">郭思辰</td>
+                        </tr>
+                        <tr><td>2</td><td>感染科</td><td class="text-xl font-bold">陳宏睿</td></tr>
+                        <tr><td>3</td><td>加護醫學部</td><td class="text-xl font-bold">沈修年</td></tr>
+
+                        <!-- 外科系 -->
+                        <tr>
+                            <td rowspan="3" class="font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-slate-800">外科系</td>
+                            <td>1</td><td>泌尿外科</td><td class="text-xl font-bold">李高漢</td>
+                        </tr>
+                        <tr><td>2</td><td>胸腔外科</td><td class="text-xl font-bold">蘇英傑</td></tr>
+                        <tr><td>3</td><td>整形外科</td><td class="text-xl font-bold">陳俊嘉</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-center gap-6 mt-4">
+                <div class="bg-blue-100 dark:bg-blue-900/30 p-4 rounded-lg text-center border border-blue-200 dark:border-blue-800">
+                    <p class="text-lg font-bold text-blue-800 dark:text-blue-200">
+                        指導分數達88分以上 (內科系)
+                    </p>
+                    <p class="text-3xl font-black text-blue-900 dark:text-white mt-2">
+                        41本 <span class="text-sm font-normal text-slate-500 dark:text-slate-400">/ 總本數60</span>
+                    </p>
+                </div>
+                <div class="bg-teal-100 dark:bg-teal-900/30 p-4 rounded-lg text-center border border-teal-200 dark:border-teal-800">
+                    <p class="text-lg font-bold text-teal-800 dark:text-teal-200">
+                        指導分數達88分以上 (外科系)
+                    </p>
+                    <p class="text-3xl font-black text-teal-900 dark:text-white mt-2">
+                        23本 <span class="text-sm font-normal text-slate-500 dark:text-slate-400">/ 總本數53</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: UGY 成績 -->
+        <section class="slide-section">
+            <h2 class="text-4xl font-black text-center mb-10">115-Q1 實習醫學生(UGY)成績</h2>
+            <div class="max-w-3xl mx-auto w-full">
+                <div class="bg-gradient-to-br from-violet-500 to-purple-700 dark:from-violet-600 dark:to-purple-800 rounded-3xl shadow-2xl p-12 text-center text-white">
+                    <div class="mb-6">
+                        <i class="fas fa-user-graduate text-6xl opacity-90"></i>
+                    </div>
+                    <h3 class="text-4xl font-black mb-8 tracking-wide">內分泌新陳代謝科</h3>
+                    <div class="grid grid-cols-2 gap-8">
+                        <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-6">
+                            <p class="text-lg opacity-90 mb-2 font-semibold">本&nbsp;&nbsp;數</p>
+                            <p class="text-6xl font-black">2 <span class="text-xl opacity-80">本</span></p>
+                        </div>
+                        <div class="bg-white/15 backdrop-blur-sm rounded-2xl p-6">
+                            <p class="text-lg opacity-90 mb-2 font-semibold">平均分數</p>
+                            <p class="text-6xl font-black">88.96</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8: 評分不佳項目 -->
+        <section class="slide-section">
+            <h2 class="text-4xl font-black text-center mb-4">115年第一季評分不佳項目</h2>
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg w-full">
+                <div id="chart-poor-items" class="chart-container h-[500px]"></div>
+                <div class="mt-4 text-center">
+                    <p class="text-3xl font-black text-red-600 dark:text-red-400">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>不佳項目：第35項 (20本)
+                    </p>
+                </div>
+            </div>
+
+            <div class="max-w-4xl mx-auto w-full space-y-6 mt-10">
+
+                <!-- 常見缺失 -->
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 border-l-8 border-rose-500">
+                    <h2 class="text-3xl font-black text-rose-600 dark:text-rose-400 mb-6 flex items-center">
+                        <i class="fas fa-spade text-2xl mr-3"></i> 病歷審查常見缺失
+                    </h2>
+                    <div class="space-y-4 text-lg">
+                        <p class="font-bold text-slate-800 dark:text-white text-xl">
+                            ◆ 第35項：
+                        </p>
+                        <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                            主治醫師未修改學員之病歷書寫，對其所屬醫學團隊醫師的 Admission Note，<span class="font-bold text-rose-600 dark:text-rose-400">未給予指正或評論</span>。
+                        </p>
+                        <div class="mt-4 bg-rose-50 dark:bg-rose-900/20 p-4 rounded-lg inline-block">
+                            <p class="font-bold text-rose-800 dark:text-rose-200">
+                                Q4 上季 17/126 本 ➝ Q1 本季 20/123 本
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 改善方案 -->
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 border-l-8 border-amber-500">
+                    <h2 class="text-3xl font-black text-amber-600 dark:text-amber-400 mb-6">
+                        <i class="fas fa-clipboard-check mr-3"></i> 改善方案：第35項
+                    </h2>
+                    <ul class="space-y-4 list-disc list-inside text-lg text-slate-700 dark:text-slate-300">
+                        <li class="pl-2">
+                            <span class="font-bold text-slate-900 dark:text-white">第35項：</span>持續個別通知單季1本(Q4上季13位，Q1本季16位)，及單季2本以上(Q4上季2位，Q1本季2位)，要求積極改善。
+                        </li>
+                        <li class="pl-2">
+                            兩季(Q4上季+Q1本季)皆超過2本的主治醫師為 <span class="text-2xl font-black text-emerald-600 dark:text-emerald-400">0</span> 位。
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 追蹤讀取比率 -->
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 border-l-8 border-blue-500">
+                    <h2 class="text-3xl font-black text-blue-600 dark:text-blue-400 mb-6">
+                        <i class="fas fa-eye mr-3"></i> 追蹤讀取比率
+                    </h2>
+                    <p class="text-lg text-slate-700 dark:text-slate-300 mb-4">
+                        追蹤學員實際查詢(點選)評核分數及評語：
+                    </p>
+                    <div class="flex gap-4 items-center flex-wrap">
+                        <div class="bg-gray-100 dark:bg-slate-700 px-6 py-3 rounded-xl">
+                            <span class="block text-sm text-gray-500 dark:text-gray-400">Q3 讀取比率</span>
+                            <span class="text-2xl font-black text-slate-800 dark:text-white">46.15%</span>
+                        </div>
+                        <i class="fas fa-arrow-right text-gray-400"></i>
+                        <div class="bg-blue-50 dark:bg-blue-900/30 px-6 py-3 rounded-xl border border-blue-200 dark:border-blue-800">
+                            <span class="block text-sm text-blue-600 dark:text-blue-400">Q4 上季讀取比率</span>
+                            <span class="text-2xl font-black text-blue-800 dark:text-blue-200">44.54%</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Slide 9: 監測結果 -->
+        <section class="slide-section">
+            <h2 class="text-3xl font-black text-center mb-6 leading-tight max-w-5xl mx-auto">
+                監測內外婦兒骨科 PGY 醫師須達每月至少書寫 8 本<br>
+                R1 及 R2 每月至少 4 本 Primary Care 病歷，查詢結果:
+            </h2>
+
+            <div class="w-full max-w-4xl mx-auto space-y-8">
+                <!-- Table 1: PGY vs R -->
+                <div class="bg-white dark:bg-slate-800 shadow-xl rounded-xl overflow-hidden">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th rowspan="2">職別＼區間</th>
+                                <th colspan="2" class="bg-slate-200 dark:bg-slate-700">Q4 上季 (10月+11月+12月)</th>
+                                <th colspan="2" class="bg-blue-100 dark:bg-blue-900/50">Q1 本季 (1月+2月+3月)</th>
+                            </tr>
+                            <tr>
+                                <th class="bg-slate-50 dark:bg-slate-800">達成人數</th>
+                                <th class="bg-slate-50 dark:bg-slate-800">監測人數</th>
+                                <th class="bg-blue-50 dark:bg-blue-900/20">達成人數</th>
+                                <th class="bg-blue-50 dark:bg-blue-900/20">監測人數</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-bold">PGY (PGY1+PGY2)</td>
+                                <td>107 (70.39%)</td>
+                                <td>152</td>
+                                <td class="font-bold text-blue-700 dark:text-blue-300">100 (71.43%)</td>
+                                <td>140</td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold">R (R1+R2)</td>
+                                <td>51 (91.07%)</td>
+                                <td>56</td>
+                                <td class="font-bold text-blue-700 dark:text-blue-300">40 (76.92%)</td>
+                                <td>52</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Table 2: R1 & R2 Breakdown -->
+                <div class="bg-white dark:bg-slate-800 shadow-xl rounded-xl overflow-hidden">
+                    <div class="p-4 bg-slate-100 dark:bg-slate-700 border-b border-slate-200 dark:border-slate-600">
+                        <h3 class="font-bold text-lg text-center">內外婦兒骨科 R1 及 R2：</h3>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th rowspan="2">區間<br>科別</th>
+                                <th colspan="2" class="bg-slate-200 dark:bg-slate-700">Q4 上季 (10月+11月+12月)</th>
+                                <th colspan="2" class="bg-emerald-100 dark:bg-emerald-900/50">Q1 本季 (1月+2月+3月)</th>
+                            </tr>
+                            <tr>
+                                <th class="bg-slate-50 dark:bg-slate-800">達成人數</th>
+                                <th class="bg-slate-50 dark:bg-slate-800">監測人數</th>
+                                <th class="bg-emerald-50 dark:bg-emerald-900/20">達成人數</th>
+                                <th class="bg-emerald-50 dark:bg-emerald-900/20">監測人數</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>內科部</td>
+                                <td>22 (100.00%)</td><td>22</td>
+                                <td>14 (82.35%)</td><td>17</td>
+                            </tr>
+                            <tr>
+                                <td>外科部</td>
+                                <td>16 (84.21%)</td><td>19</td>
+                                <td>16 (80.00%)</td><td>20</td>
+                            </tr>
+                            <tr>
+                                <td>婦產部</td>
+                                <td>6 (100.00%)</td><td>6</td>
+                                <td>5 (83.33%)</td><td>6</td>
+                            </tr>
+                            <tr>
+                                <td>兒科部</td>
+                                <td class="text-gray-400">N/A</td><td class="text-gray-400">N/A</td>
+                                <td class="text-gray-400">N/A</td><td class="text-gray-400">N/A</td>
+                            </tr>
+                            <tr>
+                                <td>骨科部</td>
+                                <td>7 (77.78%)</td><td>9</td>
+                                <td>5 (55.56%)</td><td>9</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Final Improvement Plan -->
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-10 border-t-8 border-indigo-500 text-center">
+                    <h2 class="text-3xl font-black text-indigo-600 dark:text-indigo-400 mb-6">
+                        <i class="fas fa-lightbulb mr-3"></i> 改善方案
+                    </h2>
+                    <p class="text-xl font-bold text-slate-800 dark:text-white leading-relaxed">
+                        持續個別通知兩季(Q4 上季 + Q1 本季)<br>皆未達成之 R1 及 R2 <span class="text-rose-600 text-3xl mx-2">(3 位)</span>，<br>要求積極改善。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white dark:bg-slate-900 py-8 border-t border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 text-center text-slate-500 dark:text-slate-400">
+            115年度第一季 · 病歷審查組
         </div>
-      </div>
-      <div class="issue-block issue-track">
-        <div class="head">● 追蹤讀取比率</div>
-        <div class="body">
-          追蹤學員實際查詢 (點選) 評核分數及評語；<b>Q3 讀取比率：46.15%</b>，<b>Q4 上季讀取比率：44.54%</b>。
-        </div>
-      </div>
-    </div>
-  </section>
+    </footer>
 
-  <!-- ========== Slide 9 ========== -->
-  <section class="slide" id="slide-9">
-        <h1 class="slide-title">內外婦兒骨科 PGY / R1 / R2 Primary Care 病歷查詢結果</h1>
+    <script>
+        // Theme Toggle Logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
 
-    <div class="monitor-title">● 監測內外婦兒骨科 PGY 醫師須達每月至少書寫 8 本、R1 及 R2 每月至少 4 本 Primary Care 病歷，查詢結果：</div>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+        } else {
+            htmlElement.classList.remove('dark');
+        }
 
-    <table class="data">
-      <thead>
-        <tr>
-          <th rowspan="2" style="width:24%">職別＼區間</th>
-          <th colspan="2">Q4 上季 (10月+11月+12月)</th>
-          <th colspan="2">Q1 本季 (1月+2月+3月)</th>
-        </tr>
-        <tr>
-          <th>達成人數</th><th>監測人數</th><th>達成人數</th><th>監測人數</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td class="group">PGY (PGY1+PGY2)</td><td>107 (70.39%)</td><td>152</td><td>100 (71.43%)</td><td>140</td></tr>
-        <tr><td class="group">R (R1+R2)</td><td>51 (91.07%)</td><td>56</td><td>40 (76.92%)</td><td>52</td></tr>
-      </tbody>
-    </table>
-
-    <h2 class="sub-title" style="margin-top:24px">● 內外婦兒骨科 R1 及 R2：</h2>
-
-    <table class="data">
-      <thead>
-        <tr>
-          <th rowspan="2" style="width:18%">科別＼區間</th>
-          <th colspan="2">Q4 上季 (10月+11月+12月)</th>
-          <th colspan="2">Q1 本季 (1月+2月+3月)</th>
-        </tr>
-        <tr>
-          <th>達成人數</th><th>監測人數</th><th>達成人數</th><th>監測人數</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td class="group">內科部</td><td>22 (100.00%)</td><td>22</td><td>14 (82.35%)</td><td>17</td></tr>
-        <tr><td class="group">外科部</td><td>16 (84.21%)</td><td>19</td><td>16 (80.00%)</td><td>20</td></tr>
-        <tr><td class="group">婦產部</td><td>6 (100.00%)</td><td>6</td><td>5 (83.33%)</td><td>6</td></tr>
-        <tr><td class="group">兒科部</td><td>N/A</td><td>N/A</td><td>N/A</td><td>N/A</td></tr>
-        <tr><td class="group">骨科部</td><td>7 (77.78%)</td><td>9</td><td>5 (55.56%)</td><td>9</td></tr>
-      </tbody>
-    </table>
-
-    <div class="remark" style="background:#dcfce7;border-left-color:#059669;color:#064e3b;margin-top:22px">
-      改善方案：持續個別通知兩季 (Q4 上季 + Q1 本季) 皆未達成之 R1 及 R2 (3 位)，要求積極改善。
-    </div>
-  </section>
-
-</main>
-
-<div class="scroll-hint">↓ 連續滾動瀏覽投影片 ↓</div>
-
-<script>
-  Chart.register(ChartDataLabels);
-
-  const FONT_FAMILY = '"Noto Sans TC","Microsoft JhengHei",sans-serif';
-  Chart.defaults.font.family = FONT_FAMILY;
-  Chart.defaults.color = '#0f172a';
-
-  const GRAD = (ctx, c1, c2) => {
-    const chartArea = ctx.chart.chartArea;
-    if (!chartArea) return c1;
-    const g = ctx.chart.ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-    g.addColorStop(0, c1);
-    g.addColorStop(1, c2);
-    return g;
-  };
-
-  // Plugin: tilt labels for long names
-  const tickCallback = function(value, index){
-    const lbl = this.getLabelForValue(value);
-    return lbl;
-  };
-
-  // ----- Slide 3a: 內科系總成績 -----
-  new Chart(document.getElementById('chartInternal'), {
-    type: 'bar',
-    data: {
-      labels: ['緩和醫學科','內分泌新陳代謝科','皮膚科'],
-      datasets: [{
-        label: '分數',
-        data: [89.60, 89.47, 89.47],
-        backgroundColor: ctx => GRAD(ctx, '#22d3ee', '#0e7490'),
-        borderColor: '#0e7490',
-        borderWidth: 1.5,
-        borderRadius: 10,
-        maxBarThickness: 90
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      layout:{padding:{top:32,right:18,bottom:8,left:8}},
-      scales: {
-        y: { min: 85, max: 91, ticks:{font:{size:15,weight:600}}, grid:{color:'#e2e8f0'}},
-        x: { ticks:{font:{size:17,weight:700}, autoSkip:false, maxRotation:25, minRotation:0, callback:tickCallback}, grid:{display:false}}
-      },
-      plugins: {
-        legend:{display:false},
-        datalabels:{
-          anchor:'end', align:'top', offset:4,
-          font:{size:20,weight:900}, color:'#0c4a6e',
-          formatter: v => v.toFixed(2)
-        },
-        annotation: {
-          annotations: {
-            avg: {
-              type:'line', yMin:87.69, yMax:87.69, borderColor:'#dc2626', borderWidth:3, borderDash:[8,4], drawTime:'afterDatasetsDraw',
-              label:{ enabled:true, display:true, content:'平均 87.69', position:'end', backgroundColor:'#dc2626', color:'#fff', font:{size:15,weight:900}, padding:6, yAdjust:-2 }
+        themeToggleBtn.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark');
+            if (htmlElement.classList.contains('dark')) {
+                localStorage.theme = 'dark';
+            } else {
+                localStorage.theme = 'light';
             }
-          }
+            initCharts();
+        });
+
+        // Chart Initialization
+        let charts = [];
+
+        function initCharts() {
+            charts.forEach(chart => chart.dispose());
+            charts = [];
+
+            const isDark = htmlElement.classList.contains('dark');
+            const textColor = isDark ? '#e2e8f0' : '#334155';
+            const axisColor = isDark ? '#64748b' : '#94a3b8';
+            const gridColor = isDark ? '#334155' : '#e2e8f0';
+
+            const commonOptions = {
+                backgroundColor: 'transparent',
+                textStyle: { fontFamily: 'Noto Sans TC' },
+                grid: { left: '12%', right: '8%', top: '15%', bottom: '18%' },
+                xAxis: {
+                    type: 'category',
+                    axisLabel: { color: textColor, fontSize: 13, interval: 0, rotate: 20 },
+                    axisLine: { lineStyle: { color: axisColor } }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: { color: textColor, fontSize: 12 },
+                    splitLine: { lineStyle: { color: gridColor } }
+                },
+                tooltip: { trigger: 'axis' }
+            };
+
+            // 1. Internal Score Chart (內科系 — 緩和醫學科 / 內分泌新陳代謝科 / 皮膚科)
+            const chartInternal = echarts.init(document.getElementById('chart-internal-score'));
+            chartInternal.setOption({
+                ...commonOptions,
+                xAxis: { ...commonOptions.xAxis, data: ['緩和醫學科', '內分泌新陳代謝科', '皮膚科'] },
+                yAxis: { ...commonOptions.yAxis, min: 85, max: 91 },
+                series: [{
+                    name: '分數', type: 'bar',
+                    data: [89.60, 89.47, 89.47],
+                    itemStyle: { color: '#0ea5e9', borderRadius: [6,6,0,0] },
+                    barWidth: '45%',
+                    label: { show: true, position: 'top', fontSize: 16, fontWeight: 'bold', color: textColor, formatter: '{c}' },
+                    markLine: {
+                        symbol: ['none', 'none'],
+                        data: [{ yAxis: 87.69, name: '平均 87.69' }],
+                        lineStyle: { color: '#dc2626', width: 3, type: 'dashed' },
+                        label: { show: true, formatter: '平均 87.69', color: '#ffffff', backgroundColor: '#dc2626', padding: [4, 8], borderRadius: 4, fontSize: 13, fontWeight: 'bold', position: 'insideEndTop' },
+                        z: 100
+                    },
+                    z: 1
+                }]
+            });
+            charts.push(chartInternal);
+
+            // 2. Surgical Score Chart (外科系)
+            const chartSurgical = echarts.init(document.getElementById('chart-surgical-score'));
+            chartSurgical.setOption({
+                ...commonOptions,
+                xAxis: { ...commonOptions.xAxis, data: ['口腔顎面外科', '眼科', '骨科'] },
+                yAxis: { ...commonOptions.yAxis, min: 85, max: 89 },
+                series: [{
+                    name: '分數', type: 'bar',
+                    data: [87.65, 87.62, 87.07],
+                    itemStyle: { color: '#10b981', borderRadius: [6,6,0,0] },
+                    barWidth: '45%',
+                    label: { show: true, position: 'top', fontSize: 16, fontWeight: 'bold', color: textColor, formatter: '{c}' },
+                    markLine: {
+                        symbol: ['none', 'none'],
+                        data: [{ yAxis: 86.43, name: '平均 86.43' }],
+                        lineStyle: { color: '#dc2626', width: 3, type: 'dashed' },
+                        label: { show: true, formatter: '平均 86.43', color: '#ffffff', backgroundColor: '#dc2626', padding: [4, 8], borderRadius: 4, fontSize: 13, fontWeight: 'bold', position: 'insideEndTop' },
+                        z: 100
+                    },
+                    z: 1
+                }]
+            });
+            charts.push(chartSurgical);
+
+            // 3. Self Review Chart (自審科部)
+            const chartSelf = echarts.init(document.getElementById('chart-self-review'));
+            chartSelf.setOption({
+                ...commonOptions,
+                xAxis: { ...commonOptions.xAxis, data: ['兒科部', '精神醫學部', '婦產部', '加護醫學部', '急診醫學部'], axisLabel: { ...commonOptions.xAxis.axisLabel, rotate: 0, fontSize: 14 } },
+                yAxis: { ...commonOptions.yAxis, min: 80, max: 92 },
+                series: [{
+                    type: 'bar',
+                    data: [89.94, 88.46, 87.43, 86, 85.04],
+                    itemStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: '#6366f1' },
+                            { offset: 1, color: '#4338ca' }
+                        ]),
+                        borderRadius: [8,8,0,0]
+                    },
+                    barWidth: '50%',
+                    label: { show: true, position: 'top', fontSize: 18, fontWeight: 'bold', color: textColor, formatter: '{c}' }
+                }]
+            });
+            charts.push(chartSelf);
+
+            // 4. Internal Guide Chart
+            const chartIntGuide = echarts.init(document.getElementById('chart-internal-guide'));
+            chartIntGuide.setOption({
+                ...commonOptions,
+                xAxis: { ...commonOptions.xAxis, data: ['加護醫學部', '一般內科', '內分泌新陳代謝科'] },
+                yAxis: { ...commonOptions.yAxis, min: 88, max: 91 },
+                series: [{
+                    type: 'bar',
+                    data: [90.00, 89.75, 89.67],
+                    itemStyle: { color: '#3b82f6', borderRadius: [6,6,0,0] },
+                    barWidth: '45%',
+                    label: { show: true, position: 'top', fontSize: 16, fontWeight: 'bold', color: textColor, formatter: '{c}' }
+                }]
+            });
+            charts.push(chartIntGuide);
+
+            // 5. Surgical Guide Chart
+            const chartSurgGuide = echarts.init(document.getElementById('chart-surgical-guide'));
+            chartSurgGuide.setOption({
+                ...commonOptions,
+                xAxis: { ...commonOptions.xAxis, data: ['胸腔外科', '口腔顎面外科', '整形外科'] },
+                yAxis: { ...commonOptions.yAxis, min: 87, max: 90 },
+                series: [{
+                    type: 'bar',
+                    data: [88.60, 88.25, 88.20],
+                    itemStyle: { color: '#059669', borderRadius: [6,6,0,0] },
+                    barWidth: '45%',
+                    label: { show: true, position: 'top', fontSize: 16, fontWeight: 'bold', color: textColor, formatter: '{c}' }
+                }]
+            });
+            charts.push(chartSurgGuide);
+
+            // 6. Poor Items Chart (Line Chart 1-35)
+            const poorData = [6,2,1,0,0,0,8,0,9,0,0,1,6,2,0,0,2,0,1,0,0,1,2,0,1,1,0,4,0,0,0,1,3,0,20];
+            const xData = Array.from({length: 35}, (_, i) => i + 1);
+
+            const chartPoor = echarts.init(document.getElementById('chart-poor-items'));
+            chartPoor.setOption({
+                ...commonOptions,
+                tooltip: { trigger: 'axis' },
+                grid: { left: '8%', right: '6%', top: '12%', bottom: '12%' },
+                xAxis: {
+                    type: 'category',
+                    data: xData,
+                    name: '項目',
+                    nameLocation: 'middle',
+                    nameGap: 30,
+                    nameTextStyle: { color: textColor, fontSize: 14, fontWeight: 'bold' },
+                    axisLabel: { interval: 0, fontSize: 12, color: textColor },
+                    axisLine: { lineStyle: { color: axisColor } }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '本數',
+                    nameTextStyle: { color: textColor, fontSize: 14, fontWeight: 'bold', align: 'right' },
+                    axisLabel: { color: textColor, fontSize: 12 },
+                    splitLine: { lineStyle: { color: gridColor } },
+                    max: 24
+                },
+                series: [{
+                    type: 'line',
+                    data: poorData,
+                    smooth: false,
+                    symbol: 'circle',
+                    symbolSize: 9,
+                    lineStyle: { color: isDark ? '#f87171' : '#dc2626', width: 4 },
+                    itemStyle: { color: isDark ? '#f87171' : '#dc2626' },
+                    areaStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: 'rgba(220,38,38,0.25)' },
+                            { offset: 1, color: 'rgba(220,38,38,0.02)' }
+                        ])
+                    },
+                    markPoint: {
+                        data: [{
+                            coord: [34, 20],
+                            value: '20',
+                            symbol: 'circle',
+                            symbolSize: 70,
+                            itemStyle: { color: '#dc2626', borderColor: '#fff', borderWidth: 3 },
+                            label: { color: '#ffffff', fontSize: 28, fontWeight: 'bold', formatter: '20' }
+                        }]
+                    },
+                    label: {
+                        show: true,
+                        position: 'top',
+                        color: textColor,
+                        fontSize: 11,
+                        fontWeight: 'bold',
+                        formatter: ({ value }) => value > 0 ? value : ''
+                    }
+                }]
+            });
+            charts.push(chartPoor);
         }
-      }
-    }
-  });
 
-  // ----- Slide 3b: 外科系總成績 -----
-  new Chart(document.getElementById('chartSurgical'), {
-    type: 'bar',
-    data: {
-      labels: ['口腔顎面外科','眼科','骨科'],
-      datasets: [{
-        label:'分數',
-        data: [87.65, 87.62, 87.07],
-        backgroundColor: ctx => GRAD(ctx, '#5eead4', '#0d9488'),
-        borderColor:'#0f766e', borderWidth:1.5, borderRadius:10, maxBarThickness:90
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      layout:{padding:{top:32,right:18,bottom:8,left:8}},
-      scales:{
-        y:{min:85,max:89, ticks:{font:{size:15,weight:600}}, grid:{color:'#e2e8f0'}},
-        x:{ticks:{font:{size:17,weight:700}, autoSkip:false, maxRotation:25, minRotation:0}, grid:{display:false}}
-      },
-      plugins:{
-        legend:{display:false},
-        datalabels:{anchor:'end',align:'top',offset:4,font:{size:20,weight:900},color:'#0f766e',formatter:v=>v.toFixed(2)},
-        annotation:{
-          annotations:{
-            avg:{type:'line', yMin:86.43, yMax:86.43, borderColor:'#dc2626', borderWidth:3, borderDash:[8,4], drawTime:'afterDatasetsDraw',
-              label:{ enabled:true, display:true, content:'平均 86.43', position:'end', backgroundColor:'#dc2626', color:'#fff', font:{size:15,weight:900}, padding:6, yAdjust:-2 }
-            }
-          }
-        }
-      }
-    }
-  });
+        // Initialize on load
+        window.addEventListener('load', initCharts);
 
-  // ----- Slide 4: 自審科部 -----
-  new Chart(document.getElementById('chartSelfAudit'), {
-    type:'bar',
-    data:{
-      labels:['兒科部','精神醫學部','婦產部','加護醫學部','急診醫學部'],
-      datasets:[{
-        label:'分數',
-        data:[89.94, 88.46, 87.43, 86, 85.04],
-        backgroundColor: ctx => GRAD(ctx, '#7dd3fc', '#0c4a6e'),
-        borderColor:'#0c4a6e', borderWidth:1.5, borderRadius:12, maxBarThickness:120
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      layout:{padding:{top:36,right:24,bottom:8,left:8}},
-      scales:{
-        y:{min:80,max:92, ticks:{font:{size:16,weight:600}}, grid:{color:'#e2e8f0'}, title:{display:true, text:'分數', font:{size:17,weight:700}, color:'#0c4a6e'}},
-        x:{ticks:{font:{size:20,weight:800}, autoSkip:false}, grid:{display:false}}
-      },
-      plugins:{
-        legend:{display:false},
-        datalabels:{anchor:'end',align:'top',offset:6,font:{size:24,weight:900},color:'#0c4a6e',formatter:v=>v.toFixed(2)}
-      }
-    }
-  });
+        // Resize listener
+        window.addEventListener('resize', () => {
+            charts.forEach(chart => chart.resize());
+        });
+    </script>
 
-  // ----- Slide 5a: 內科系病歷指導 -----
-  new Chart(document.getElementById('chartInternalGuide'), {
-    type:'bar',
-    data:{
-      labels:['加護醫學部','一般內科','內分泌新陳代謝科'],
-      datasets:[{
-        label:'分數',
-        data:[90.00, 89.75, 89.67],
-        backgroundColor: ctx => GRAD(ctx, '#a5b4fc', '#4338ca'),
-        borderColor:'#4338ca', borderWidth:1.5, borderRadius:10, maxBarThickness:90
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      layout:{padding:{top:32,right:18,bottom:8,left:8}},
-      scales:{
-        y:{min:88,max:91, ticks:{font:{size:15,weight:600}}, grid:{color:'#e2e8f0'}},
-        x:{ticks:{font:{size:17,weight:700}, autoSkip:false, maxRotation:25, minRotation:0}, grid:{display:false}}
-      },
-      plugins:{
-        legend:{display:false},
-        datalabels:{anchor:'end',align:'top',offset:4,font:{size:20,weight:900},color:'#4338ca',formatter:v=>v.toFixed(2)}
-      }
-    }
-  });
-
-  // ----- Slide 5b: 外科系病歷指導 -----
-  new Chart(document.getElementById('chartSurgicalGuide'), {
-    type:'bar',
-    data:{
-      labels:['胸腔外科','口腔顎面外科','整形外科'],
-      datasets:[{
-        label:'分數',
-        data:[88.60, 88.25, 88.20],
-        backgroundColor: ctx => GRAD(ctx, '#fda4af', '#be123c'),
-        borderColor:'#be123c', borderWidth:1.5, borderRadius:10, maxBarThickness:90
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      layout:{padding:{top:32,right:18,bottom:8,left:8}},
-      scales:{
-        y:{min:87,max:90, ticks:{font:{size:15,weight:600}}, grid:{color:'#e2e8f0'}},
-        x:{ticks:{font:{size:17,weight:700}, autoSkip:false, maxRotation:25, minRotation:0}, grid:{display:false}}
-      },
-      plugins:{
-        legend:{display:false},
-        datalabels:{anchor:'end',align:'top',offset:4,font:{size:20,weight:900},color:'#be123c',formatter:v=>v.toFixed(2)}
-      }
-    }
-  });
-
-  // ----- Slide 8: 評分不佳項目 line chart -----
-  const itemsData = [6,2,1,0,0,0,8,0,9,0,0,1,6,2,0,0,2,0,1,0,0,1,2,0,1,1,0,4,0,0,0,1,3,0,20];
-  const itemsLabels = Array.from({length:35}, (_,i) => String(i+1));
-
-  new Chart(document.getElementById('chartBadItems'), {
-    type:'line',
-    data:{
-      labels: itemsLabels,
-      datasets:[{
-        label:'本數',
-        data: itemsData,
-        borderColor:'#dc2626',
-        backgroundColor:'rgba(220,38,38,.12)',
-        borderWidth:5,
-        tension:.28,
-        pointBackgroundColor: itemsData.map((v,i)=> i===34 ? '#facc15' : '#dc2626'),
-        pointBorderColor:'#7f1d1d',
-        pointBorderWidth:2,
-        pointRadius: itemsData.map((v,i)=> i===34 ? 12 : 5),
-        pointHoverRadius: itemsData.map((v,i)=> i===34 ? 14 : 7),
-        fill:true
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      layout:{padding:{top:36,right:18,bottom:8,left:8}},
-      scales:{
-        y:{
-          min:0, max:24,
-          ticks:{stepSize:2, font:{size:15,weight:600}}, grid:{color:'#e2e8f0'},
-          title:{display:true, text:'本數', font:{size:18,weight:800}, color:'#7f1d1d', rotation: 0, padding:{bottom:10}}
-        },
-        x:{
-          ticks:{autoSkip:false, font:{size:14,weight:700}}, grid:{color:'#f1f5f9'},
-          title:{display:true, text:'項目 (1 ~ 35)', font:{size:18,weight:800}, color:'#7f1d1d'}
-        }
-      },
-      plugins:{
-        legend:{display:false},
-        datalabels:{
-          align:'top', anchor:'end',
-          formatter: (v,ctx) => {
-            if (ctx.dataIndex === 34) return v;
-            return v > 0 ? v : '';
-          },
-          font: (ctx) => ctx.dataIndex === 34 ? {size:34,weight:900} : {size:14,weight:700},
-          color: (ctx) => ctx.dataIndex === 34 ? '#b91c1c' : '#0f172a',
-          offset: (ctx) => ctx.dataIndex === 34 ? 10 : 4
-        }
-      }
-    }
-  });
-</script>
 </body>
 </html>

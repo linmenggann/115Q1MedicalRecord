@@ -32,8 +32,10 @@
   .deck{display:flex;flex-direction:column;gap:32px;padding:32px 24px 64px}
   .slide{background:#ffffff;border-radius:24px;box-shadow:0 12px 36px rgba(15,23,42,.08),0 2px 8px rgba(15,23,42,.04);padding:48px 56px;max-width:1280px;margin:0 auto;width:100%;position:relative;overflow:hidden;border:1px solid #e0f2fe}
   .slide::before{content:"";position:absolute;left:0;top:0;width:8px;height:100%;background:linear-gradient(180deg,var(--c-primary),var(--c-secondary))}
-  .slide-num{position:absolute;right:32px;top:24px;font-weight:700;color:var(--c-primary);font-size:14px;letter-spacing:2px;background:#f0f9ff;padding:6px 14px;border-radius:999px;border:1px solid #bae6fd}
-  h1.slide-title{font-size:34px;font-weight:900;color:var(--c-primary-dark);margin:0 0 18px;padding-bottom:14px;border-bottom:3px solid var(--c-primary);display:inline-block}
+  h1.slide-title{font-size:34px;font-weight:900;color:var(--c-primary-dark);margin:0 auto 22px;padding-bottom:14px;border-bottom:3px solid var(--c-primary);display:table;text-align:center}
+  .slide{ text-align: initial }
+  .slide > h1.slide-title{ display:block; text-align:center; border-bottom:none; position:relative; padding-bottom:18px }
+  .slide > h1.slide-title::after{ content:""; display:block; width:120px; height:3px; background:var(--c-primary); margin:14px auto 0; border-radius:2px }
   h2.sub-title{font-size:24px;font-weight:700;color:var(--c-primary);margin:24px 0 12px}
   h3.minor-title{font-size:20px;font-weight:700;color:var(--c-secondary);margin:18px 0 10px}
   table.data{width:100%;border-collapse:separate;border-spacing:0;font-size:18px;margin:12px 0 8px;background:#ffffff;border-radius:14px;overflow:hidden;box-shadow:0 4px 14px rgba(15,23,42,.05)}
@@ -99,8 +101,7 @@
 
   <!-- ========== Slide 1 ========== -->
   <section class="slide" id="slide-1">
-    <span class="slide-num">SLIDE 01</span>
-    <h1 class="slide-title">115年第一季 (1~3月) 病歷書寫成績優良名單</h1>
+        <h1 class="slide-title">115年第一季 (1~3月) 病歷書寫成績優良名單</h1>
 
     <table class="data">
       <thead>
@@ -136,8 +137,7 @@
 
   <!-- ========== Slide 2 ========== -->
   <section class="slide" id="slide-2">
-    <span class="slide-num">SLIDE 02</span>
-    <h1 class="slide-title">115年度第一季 (115/01-03月) 受訓醫師／醫學生病歷審查結果</h1>
+        <h1 class="slide-title">115年度第一季 (115/01-03月) 受訓醫師／醫學生病歷審查結果</h1>
     <h2 class="sub-title">病歷審查組</h2>
 
     <div class="info-grid">
@@ -157,8 +157,7 @@
 
   <!-- ========== Slide 3 ========== -->
   <section class="slide" id="slide-3">
-    <span class="slide-num">SLIDE 03</span>
-    <h1 class="slide-title">115-Q1 總成績：內／外科系</h1>
+        <h1 class="slide-title">115-Q1 總成績：內／外科系</h1>
 
     <div class="chart-row">
       <div class="chart-card">
@@ -179,8 +178,7 @@
 
   <!-- ========== Slide 4 ========== -->
   <section class="slide" id="slide-4">
-    <span class="slide-num">SLIDE 04</span>
-    <h1 class="slide-title">115-Q1 自審科部病歷書寫評比</h1>
+        <h1 class="slide-title">115-Q1 自審科部病歷書寫評比</h1>
     <div class="chart-card" style="margin-top:8px">
       <div class="single-chart-wrap"><canvas id="chartSelfAudit"></canvas></div>
     </div>
@@ -188,8 +186,7 @@
 
   <!-- ========== Slide 5 ========== -->
   <section class="slide" id="slide-5">
-    <span class="slide-num">SLIDE 05</span>
-    <h1 class="slide-title">內／外科系 病歷指導優良評比排名</h1>
+        <h1 class="slide-title">內／外科系 病歷指導優良評比排名</h1>
 
     <div class="chart-row">
       <div class="chart-card">
@@ -208,8 +205,7 @@
 
   <!-- ========== Slide 6 ========== -->
   <section class="slide" id="slide-6">
-    <span class="slide-num">SLIDE 06</span>
-    <h1 class="slide-title">115年第一季 (115/01~03月) 主治醫師病歷指導優良名單</h1>
+        <h1 class="slide-title">115年第一季 (115/01~03月) 主治醫師病歷指導優良名單</h1>
 
     <table class="data">
       <thead>
@@ -233,8 +229,7 @@
 
   <!-- ========== Slide 7 ========== -->
   <section class="slide" id="slide-7">
-    <span class="slide-num">SLIDE 07</span>
-    <h1 class="slide-title">115-Q1 實習醫學生 (UGY) 成績</h1>
+        <h1 class="slide-title">115-Q1 實習醫學生 (UGY) 成績</h1>
 
     <div class="ugy-card">
       <div class="dept-name">內分泌新陳代謝科</div>
@@ -247,8 +242,7 @@
 
   <!-- ========== Slide 8 ========== -->
   <section class="slide" id="slide-8">
-    <span class="slide-num">SLIDE 08</span>
-    <h1 class="slide-title">115年第一季 評分不佳項目</h1>
+        <h1 class="slide-title">115年第一季 評分不佳項目</h1>
 
     <div class="chart-card" style="margin-top:6px">
       <div class="single-chart-wrap" style="height:440px"><canvas id="chartBadItems"></canvas></div>
@@ -279,8 +273,7 @@
 
   <!-- ========== Slide 9 ========== -->
   <section class="slide" id="slide-9">
-    <span class="slide-num">SLIDE 09</span>
-    <h1 class="slide-title">內外婦兒骨科 PGY / R1 / R2 Primary Care 病歷查詢結果</h1>
+        <h1 class="slide-title">內外婦兒骨科 PGY / R1 / R2 Primary Care 病歷查詢結果</h1>
 
     <div class="monitor-title">● 監測內外婦兒骨科 PGY 醫師須達每月至少書寫 8 本、R1 及 R2 每月至少 4 本 Primary Care 病歷，查詢結果：</div>
 

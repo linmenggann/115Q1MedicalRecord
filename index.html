@@ -203,6 +203,7 @@
                     </div>
                     <h3 class="text-2xl font-bold text-slate-500 dark:text-slate-400 mb-2">抽審本數</h3>
                     <p class="text-6xl font-black text-slate-800 dark:text-white">123 <span class="text-2xl font-normal text-slate-500">本</span></p>
+                    <div id="chart-audit-volume" class="mt-6 h-28"></div>
                 </div>
 
                 <!-- 總平均 -->
@@ -213,6 +214,7 @@
                     </div>
                     <h3 class="text-2xl font-bold text-slate-500 dark:text-slate-400 mb-2">總平均</h3>
                     <p class="text-6xl font-black text-slate-800 dark:text-white">87.28 <span class="text-2xl font-normal text-slate-500">分</span></p>
+                    <div id="chart-average-score" class="mt-6 h-28"></div>
                 </div>
 
                 <!-- 全人照護本數 -->
@@ -222,6 +224,7 @@
                     </div>
                     <h3 class="text-2xl font-bold text-slate-500 dark:text-slate-400 mb-2">全人照護本數</h3>
                     <p class="text-6xl font-black text-slate-800 dark:text-white">11 <span class="text-2xl font-normal text-slate-500">本</span></p>
+                    <div id="chart-holistic-care" class="mt-6 h-28"></div>
                 </div>
             </div>
 
@@ -610,6 +613,65 @@
             const textColor = isDark ? '#e2e8f0' : '#334155';
             const axisColor = isDark ? '#64748b' : '#94a3b8';
             const gridColor = isDark ? '#334155' : '#e2e8f0';
+            const sparkSeasonLabels = ['第二季', '第三季', '第四季', '第一季'];
+
+            const buildSparklineOptions = (data, color, unit) => ({
+                backgroundColor: 'transparent',
+                textStyle: { fontFamily: 'Noto Sans TC' },
+                grid: { left: 36, right: 16, top: 24, bottom: 32 },
+                tooltip: { trigger: 'axis' },
+                xAxis: {
+                    type: 'category',
+                    data: sparkSeasonLabels,
+                    boundaryGap: false,
+                    axisLine: { show: true, lineStyle: { color: axisColor } },
+                    axisTick: { show: true, lineStyle: { color: axisColor } },
+                    axisLabel: { color: textColor, fontSize: 12 }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLine: { show: true, lineStyle: { color: axisColor } },
+                    axisTick: { show: true, lineStyle: { color: axisColor } },
+                    splitLine: { show: true, lineStyle: { color: gridColor } },
+                    splitNumber: 4
+                },
+                series: [{
+                    type: 'line',
+                    smooth: true,
+                    data,
+                    symbol: 'circle',
+                    symbolSize: 8,
+                    lineStyle: { color, width: 3 },
+                    itemStyle: { color },
+                    label: {
+                        show: true,
+                        position: 'top',
+                        formatter: ({ value }) => `${value}${unit}`,
+                        color: textColor,
+                        fontSize: 12,
+                        fontWeight: 'bold'
+                    },
+                    areaStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: isDark ? `${color}CC` : `${color}B3` },
+                            { offset: 1, color: 'rgba(255,255,255,0)' }
+                        ])
+                    }
+                }]
+            });
+
+            // Sparkline charts (最近四季: 114Q2 → 114Q3 → 114Q4 → 115Q1)
+            const auditSparkline = echarts.init(document.getElementById('chart-audit-volume'));
+            auditSparkline.setOption(buildSparklineOptions([144, 126, 126, 123], '#0ea5e9', '本'));
+            charts.push(auditSparkline);
+
+            const averageSparkline = echarts.init(document.getElementById('chart-average-score'));
+            averageSparkline.setOption(buildSparklineOptions([87.65, 88.12, 87.34, 87.28], '#f97316', '分'));
+            charts.push(averageSparkline);
+
+            const holisticSparkline = echarts.init(document.getElementById('chart-holistic-care'));
+            holisticSparkline.setOption(buildSparklineOptions([24, 15, 22, 11], '#10b981', '本'));
+            charts.push(holisticSparkline);
 
             const commonOptions = {
                 backgroundColor: 'transparent',

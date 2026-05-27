@@ -248,7 +248,6 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full">
                 <!-- 內科系 Chart -->
                 <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg">
-                    <p class="text-center text-lg font-semibold highlight-text mb-2">內科系平均：87.69</p>
                     <div id="chart-internal-score" class="chart-container"></div>
                     <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
                         <p class="text-2xl font-bold text-slate-800 dark:text-white text-center">
@@ -262,7 +261,6 @@
 
                 <!-- 外科系 Chart -->
                 <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg">
-                    <p class="text-center text-lg font-semibold highlight-text mb-2">外科系平均：86.43</p>
                     <div id="chart-surgical-score" class="chart-container"></div>
                     <div class="mt-4 p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
                         <p class="text-2xl font-bold text-slate-800 dark:text-white text-center">
@@ -694,6 +692,7 @@
             const chartInternal = echarts.init(document.getElementById('chart-internal-score'));
             chartInternal.setOption({
                 ...commonOptions,
+                grid: { left: '12%', right: '8%', top: '8%', bottom: '18%' },
                 xAxis: { ...commonOptions.xAxis, data: ['緩和醫學科', '內分泌新陳代謝科', '皮膚科'] },
                 yAxis: { ...commonOptions.yAxis, min: 85, max: 91 },
                 series: [{
@@ -718,6 +717,7 @@
             const chartSurgical = echarts.init(document.getElementById('chart-surgical-score'));
             chartSurgical.setOption({
                 ...commonOptions,
+                grid: { left: '12%', right: '8%', top: '8%', bottom: '18%' },
                 xAxis: { ...commonOptions.xAxis, data: ['口腔顎面外科', '眼科', '骨科'] },
                 yAxis: { ...commonOptions.yAxis, min: 85, max: 89 },
                 series: [{
